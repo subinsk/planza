@@ -126,6 +126,7 @@
     "ts-node": "~9.1.1",
     "@nrwl/cli": "13.2.2",
     "@nrwl/workspace": "13.2.2",
+    "@nrwl/node": "13.2.2",
     "voca": "^1.4.0",
     "zone.js": "0.11.4"
   },
@@ -147,7 +148,6 @@
     "@nrwl/jest": "13.2.2",
     "@nrwl/linter": "13.2.2",
     "@nrwl/nest": "13.2.2",
-    "@nrwl/node": "13.2.2",
     "@nrwl/tao": "13.2.2",
     "@tailwindcss/forms": "^0.3.3",
     "@types/auth0": "^2.33.4",
