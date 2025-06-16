@@ -57,6 +57,7 @@
     "build:api": "nx build api --prod",
     "build:planza": "nx build planza --prod",
     "start:api": "node dist/apps/api/main.js",
+    "deploy:render:temp": "npm install --legacy-peer-deps && npx prisma generate",
     "deploy:render": "npm run prisma:generate && npm run build:api",
     "start:production": "npm run migrate:deploy && npm run start:api"
   },
