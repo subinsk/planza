@@ -1,5 +1,15 @@
 /.angular/cache
 node_modules
 .env
+.env.local
+.env.production
 dist
 .idea
+
+# Temporary files
+*.tmp
+*.temp
+debug-*.js
+debug-*.html
+test-*.js
+*.sql

@@ -1,47 +1,189 @@
 :root {
-  --primary-1: hsl(219, 70%, 38%);
-  --primary: hsl(248, 92%, 64%);
-  --primary-gradient: linear-gradient(135deg, #7a65fd 0%, #1d6fa3 100%);
-  --primary-dark: hsla(160, 84%, 28%);
-  --primary-translucent: hsla(219, 70%, 38%, 0.2);
-  --primary-disabled: hsl(150, 34%, 70%);
-  --secondary: hsl(0, 0%, 88%);
-  --secondary-dark: hsl(0, 0%, 82%);
-  --secondary-disabled: hsl(0, 0%, 90%);
+  /* Primary purple color #6854e4 and its refined variants */
+  --primary: #6854e4;
+  --primary-50: #f5f3ff;
+  --primary-100: #ede9fe;
+  --primary-200: #ddd6fe;
+  --primary-300: #c4b5fd;
+  --primary-400: #a78bfa;
+  --primary-500: #6854e4; /* Main brand color */
+  --primary-600: #5a46d9;
+  --primary-700: #4c38bc;
+  --primary-800: #3e2d9c;
+  --primary-900: #2e1f7a;
+  --primary-950: #1c1259;
+  
+  /* Gradients - More subtle and modern */
+  --primary-gradient: linear-gradient(135deg, #6854e4 0%, #8b7af0 100%);
+  --primary-gradient-alt: linear-gradient(135deg, #6854e4 0%, #4f3cba 100%);
+  --subtle-gradient: linear-gradient(to right, var(--primary-50), var(--primary-100), var(--primary-50));
+  
+  /* Complementary colors - Better balance with purple */
+  --accent: #38bdf8; /* Cyan complement - works better with purple */
+  --accent-light: #bae6fd;
+  --accent-dark: #0284c7;
+  
+  /* Secondary accent for visual variety */
+  --secondary-accent: #f472b6; /* Pink accent for highlights */
+  --secondary-accent-light: #fbcfe8;
+  --secondary-accent-dark: #db2777;
+  
+  /* Neutral colors - Slightly warmer */
+  --neutral-50: #fafaf9;
+  --neutral-100: #f5f5f4;
+  --neutral-200: #e7e5e4;
+  --neutral-300: #d6d3d1;
+  --neutral-400: #a8a29e;
+  --neutral-500: #78716c;
+  --neutral-600: #57534e;
+  --neutral-700: #44403c;
+  --neutral-800: #292524;
+  --neutral-900: #1c1917;
+  --neutral-950: #0c0a09;
+  
+  /* Status colors - Refined */
+  --success: #10b981; /* Emerald */
+  --success-light: #a7f3d0;
+  --success-dark: #059669;
+  
+  --warning: #f59e0b; /* Amber */
+  --warning-light: #fcd34d;
+  --warning-dark: #d97706;
+  
+  --danger: #ef4444; /* Red */
+  --danger-light: #fca5a5;
+  --danger-dark: #dc2626;
+  
+  --info: #3b82f6; /* Blue */
+  --info-light: #93c5fd;
+  --info-dark: #2563eb;
+  
+  /* Utility */
+  --primary-translucent: rgba(104, 84, 228, 0.12);
+  --primary-hover: rgba(104, 84, 228, 0.08);
+  --primary-disabled: rgba(104, 84, 228, 0.5);
+  --secondary: var(--neutral-200);
+  --secondary-dark: var(--neutral-300);
+  --secondary-disabled: var(--neutral-100);
+  
+  /* Surface colors for layering */
+  --surface: #ffffff;
+  --surface-hover: var(--neutral-100);
+  --surface-active: var(--neutral-200);
+  --surface-elevated: #ffffff;
+  --surface-sunken: var(--neutral-50);
 }
 
 .priority {
   &.lowest {
-    color: hsl(213, 94%, 68%);
+    color: var(--info);
   }
   &.low {
-    color: hsl(160, 84%, 39%);
+    color: var(--success);
   }
   &.medium {
-    color: hsl(45, 93%, 47%);
+    color: var(--warning);
   }
   &.high {
-    color: hsl(25, 95%, 53%);
+    color: #f97316; /* Orange */
   }
   &.highest {
-    color: hsl(0, 84%, 60%);
+    color: var(--danger);
   }
 
   &--bg {
     &.lowest {
-      background-color: hsl(213, 94%, 68%);
+      background-color: var(--info-light);
+      color: var(--info-dark);
     }
     &.low {
-      background-color: hsl(160, 84%, 39%);
+      background-color: var(--success-light);
+      color: var(--success-dark);
     }
     &.medium {
-      background-color: hsl(45, 93%, 47%);
+      background-color: var(--warning-light);
+      color: var(--warning-dark);
     }
     &.high {
-      background-color: hsl(25, 95%, 53%);
+      background-color: #fdba74; /* Orange light */
+      color: #c2410c; /* Orange dark */
     }
     &.highest {
-      background-color: hsl(0, 84%, 60%);
+      background-color: var(--danger-light);
+      color: var(--danger-dark);
     }
   }
+}
+
+/* Modern, subtle UI color utilities */
+.bg-surface {
+  background-color: var(--surface);
+}
+
+.bg-surface-elevated {
+  background-color: var(--surface-elevated);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.bg-surface-sunken {
+  background-color: var(--surface-sunken);
+}
+
+.bg-surface-hover {
+  background-color: var(--surface-hover);
+}
+
+.bg-surface-active {
+  background-color: var(--surface-active);
+}
+
+.bg-primary-subtle {
+  background-color: var(--primary-50);
+}
+
+.bg-primary-hover {
+  background-color: var(--primary-hover);
+}
+
+.bg-primary-translucent {
+  background-color: var(--primary-translucent);
+}
+
+.text-primary {
+  color: var(--primary);
+}
+
+.text-primary-dark {
+  color: var(--primary-700);
+}
+
+.text-secondary {
+  color: var(--neutral-600);
+}
+
+.text-muted {
+  color: var(--neutral-500);
+}
+
+.text-subtle {
+  color: var(--neutral-400);
+}
+
+/* Border utilities */
+.border-primary {
+  border-color: var(--primary);
+}
+
+.border-subtle {
+  border-color: var(--neutral-200);
+}
+
+/* Focus & selection utilities */
+.focus-ring {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--primary-translucent);
+}
+
+::selection {
+  background-color: var(--primary-translucent);
 }

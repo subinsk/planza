@@ -10,6 +10,7 @@ generator client {
 model User {
   id                String         @id @default(cuid())
   email             String         @unique
+  auth0Sub          String?        @unique // Auth0 user ID for mapping
   firstName         String
   lastName          String
   password          String

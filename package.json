@@ -10,11 +10,16 @@
     "url": "https://github.com/subinsk/planza",
     "type": "git"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "scripts": {
     "ng": "nx",
     "after:install": "node ./decorate-angular-cli.js",
     "nx": "nx",
     "start": "ng serve",
+    "start:secure": "node -r dotenv/config node_modules/.bin/ng serve --project=planza",
+    "verify:config": "node scripts/verify-config.js",
     "start:cache": "NG_PERSISTENT_BUILD_CACHE=1 ng serve",
     "build": "ng build",
     "test": "ng test",
@@ -159,7 +164,7 @@
     "@typescript-eslint/parser": "4.31.2",
     "cross-env": "^7.0.3",
     "cypress": "^7.3.0",
-    "dotenv": "10.0.0",
+    "dotenv": "^10.0.0",
     "eslint": "7.22.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-cypress": "^2.10.3",

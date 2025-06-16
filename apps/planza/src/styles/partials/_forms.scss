@@ -6,9 +6,9 @@
     @apply pb-4;
   }
   label {
-    @apply text-gray-500;
+    @apply text-neutral-600;
     @apply mb-1;
-    @apply text-sm;
+    @apply text-sm font-medium;
   }
 
   input[type='text'],
@@ -19,35 +19,63 @@
     @apply focus:ring-1;
     @apply focus:border-primary;
     @apply focus:ring-primary;
+    @apply rounded-lg; /* More modern rounded corners */
+    @apply shadow-sm; /* Subtle shadow for depth */
+    @apply transition-all duration-200;
+    @apply border-neutral-200 bg-white;
 
     &:disabled {
-      @apply text-gray-400;
+      @apply text-neutral-400;
+      @apply bg-neutral-100;
     }
   }
 
   textarea {
     @apply focus:ring-1;
     @apply focus:ring-primary;
+    @apply focus:border-primary;
+    @apply rounded-lg; /* More modern rounded corners */
+    @apply shadow-sm; /* Subtle shadow for depth */
+    @apply transition-all duration-200;
+    @apply border-neutral-200 bg-white;
     resize: none;
     &:disabled {
-      @apply text-gray-400;
+      @apply text-neutral-400;
+      @apply bg-neutral-100;
     }
   }
 
   input[type='checkbox'],
   input[type='radio'] {
     @apply text-primary;
+    @apply rounded;
+    @apply transition-all duration-200;
+  }
+  
+  /* Helper text styles */
+  .helper-text {
+    @apply mt-1 text-xs text-neutral-500;
+  }
+  
+  /* Error message styles */
+  .error-text {
+    @apply mt-1 text-xs text-danger;
+  }
+
+  /* Success message styles */
+  .success-text {
+    @apply mt-1 text-xs text-success;
   }
 }
 
 [type='checkbox'],
 [type='radio'] {
-  border-radius: 6px !important;
+  border-radius: 4px !important;
 }
 
 [type='checkbox']:focus,
 [type='radio']:focus {
-  @apply ring-primary;
+  @apply ring-primary-400;
 }
 
 [type='text'],
@@ -66,21 +94,123 @@
 textarea,
 select {
   @apply outline-none;
-  @apply border-gray-200 bg-gray-50;
-  @apply rounded-md;
+  @apply border-neutral-200 bg-white;
+  @apply rounded-lg; /* More modern rounded corners */
+  @apply shadow-sm; /* Subtle shadow */
   @apply focus:border-primary;
-  transition: all 0.3s;
+  @apply focus:ring-1 focus:ring-primary;
+  @apply transition-all duration-200;
+  
   &::placeholder {
-    @apply text-gray-300;
+    @apply text-neutral-300;
   }
 
   &.ng-invalid.ng-dirty.ng-touched {
-    @apply focus:ring-1;
-    @apply focus:border-red-400;
-    @apply focus:ring-red-400;
+    @apply border-danger focus:border-danger focus:ring-danger;
   }
 }
 
+/* Select styling */
+select {
+  @apply appearance-none;
+  @apply bg-no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1.5em 1.5em;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  padding-right: 2.5rem;
+}
+
+/* Custom toggle switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 3.5rem;
+  height: 2rem;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--neutral-200);
+    transition: .4s;
+    border-radius: 34px;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 1.5rem;
+    width: 1.5rem;
+    left: 0.25rem;
+    bottom: 0.25rem;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  input:checked + .slider {
+    background-color: var(--primary);
+  }
+
+  input:focus + .slider {
+    box-shadow: 0 0 1px var(--primary);
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(1.5rem);
+  }
+}
+
+/* File upload styling */
+.file-upload {
+  @apply relative overflow-hidden inline-flex;
+  
+  input[type="file"] {
+    @apply absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer;
+    font-size: 100px;
+  }
+}
+
+/* Floating label style */
+.floating-label {
+  @apply relative;
+  
+  input, textarea {
+    @apply pt-6;
+  }
+  
+  label {
+    @apply absolute left-3 top-2 text-xs text-neutral-500 transition-all duration-200;
+    pointer-events: none;
+  }
+  
+  input:focus ~ label,
+  input:not(:placeholder-shown) ~ label,
+  textarea:focus ~ label,
+  textarea:not(:placeholder-shown) ~ label {
+    @apply top-2 text-xs text-primary;
+  }
+}
+
+/* Custom select styles for a more modern look */
+select {
+  @apply pr-10 bg-no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1.5em 1.5em;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+}
+
+/* Group validation styles */
 .group-validation.ng-invalid.ng-dirty.ng-touched {
   [type='text'],
   [type='email'],
@@ -98,7 +228,7 @@ select {
   textarea,
   select {
     @apply ring-1;
-    @apply border-red-400;
-    @apply ring-red-400;
+    @apply border-danger;
+    @apply ring-danger;
   }
 }

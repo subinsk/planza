@@ -8,9 +8,25 @@ const axios = require('axios');
  */
 exports.onExecutePostLogin = async (event, api) => {
   const userId = event.user.user_metadata.userId;
+  
+  // Always add basic user information to the token
+  const namespace = event.secrets.CLAIM_NAMESPACE;
+  
+  // Set standard email claim (without namespace) - this is crucial
+  api.accessToken.setCustomClaim('email', event.user.email);
+  api.idToken.setCustomClaim('email', event.user.email);
+  
+  // Set namespaced claims
+  api.accessToken.setCustomClaim(`${namespace}/email`, event.user.email);
+  api.idToken.setCustomClaim(`${namespace}/email`, event.user.email);
+  
+  // If no userId in metadata, this might be a new user or a user not yet onboarded
   if (!userId) {
-    return api.access.deny(`Access denied`);
+    console.log('No userId in user_metadata, setting basic claims only');
+    // Still allow access but with minimal claims
+    return;
   }
+  
   try {
     const token = api.redirect.encodeToken({
       secret: event.secrets.TOKEN_SECRET,
@@ -40,6 +56,11 @@ exports.onExecutePostLogin = async (event, api) => {
     if (event.authorization) {
       const org = orgs[0];
       const role = roles[org.id];
+      // Set standard email claim (without namespace)
+      api.accessToken.setCustomClaim('email', event.user.email);
+      api.idToken.setCustomClaim('email', event.user.email);
+      
+      // Set namespaced custom claims
       api.accessToken.setCustomClaim(`${namespace}/role`, role);
       api.accessToken.setCustomClaim(`${namespace}/projects`, projects);
       api.accessToken.setCustomClaim(`${namespace}/org`, org);
@@ -89,6 +110,11 @@ exports.onContinuePostLogin = async (event, api) => {
     const { org, role, projects } = data;
     const namespace = event.secrets.CLAIM_NAMESPACE;
     if (event.authorization) {
+      // Set standard email claim (without namespace)
+      api.accessToken.setCustomClaim('email', event.user.email);
+      api.idToken.setCustomClaim('email', event.user.email);
+      
+      // Set namespaced custom claims
       api.accessToken.setCustomClaim(`${namespace}/role`, role);
       api.accessToken.setCustomClaim(`${namespace}/projects`, projects);
       api.accessToken.setCustomClaim(`${namespace}/org`, org);

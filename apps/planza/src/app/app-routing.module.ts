@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { AuthGuard } from '@auth0/auth0-angular';
+import { AppComponent } from './app.component';
 
 const routes: Route[] = [
   {
@@ -18,6 +19,12 @@ const routes: Route[] = [
     loadChildren: () => import('@planza/web/auth').then((m) => m.WebAuthModule),
   },
   {
+    path: 'auth0-test',
+    component: AppComponent, // Reuse App component as placeholder
+    data: { title: 'Auth0 Test' },
+  },
+  {
+    // Handle any other routes that don't match
     path: '**',
     redirectTo: 'auth/login',
   },

@@ -1,32 +1,124 @@
 @mixin defaultRing() {
   @apply focus:outline-none;
   @apply focus:ring-2;
-  @apply focus:ring-primary;
+  @apply focus:ring-primary-400;
   @apply focus:ring-offset-1;
 }
 
 .btn {
+  @apply rounded-lg px-4 py-2 font-medium transition-all duration-200 ease-in-out;
+  
   &:disabled {
     @apply opacity-60;
     cursor: not-allowed;
   }
+  
   &--primary {
-    @apply bg-primary-gradient text-white shadow-md;
-    @apply focus:ring-2 focus:ring-primary focus:ring-offset-2;
-    @apply hover:shadow-lg;
+    @apply bg-primary text-white shadow-sm;
+    @apply focus:ring-2 focus:ring-primary-400 focus:ring-offset-2;
+    @apply hover:bg-primary-600 hover:shadow-md;
+    @apply active:bg-primary-700;
+    @apply disabled:bg-primary-300 disabled:shadow-none;
   }
+  
+  &--gradient {
+    @apply bg-primary-gradient text-white shadow-sm;
+    @apply focus:ring-2 focus:ring-primary-400 focus:ring-offset-2;
+    @apply hover:shadow-md hover:saturate-[1.2];
+    @apply active:opacity-90;
+  }
+  
   &--secondary {
-    @apply bg-gray-100 text-gray-800 border;
-    @apply focus:ring-2 focus:ring-primary focus:ring-offset-2;
-    @apply hover:bg-gray-200;
+    @apply bg-neutral-100 text-neutral-700 border border-neutral-200;
+    @apply focus:ring-2 focus:ring-primary-400 focus:ring-offset-2;
+    @apply hover:bg-neutral-200;
+    @apply active:bg-neutral-300;
   }
+  
+  &--subtle {
+    @apply bg-transparent text-neutral-700;
+    @apply focus:ring-2 focus:ring-primary-400 focus:ring-offset-2;
+    @apply hover:bg-neutral-100;
+    @apply active:bg-neutral-200;
+  }
+  
+  &--outline {
+    @apply bg-transparent text-primary border border-primary;
+    @apply focus:ring-2 focus:ring-primary-400 focus:ring-offset-2;
+    @apply hover:bg-primary-50;
+    @apply active:bg-primary-100;
+  }
+  
+  &--accent {
+    @apply bg-accent text-white shadow-sm;
+    @apply focus:ring-2 focus:ring-accent focus:ring-offset-2;
+    @apply hover:bg-accent-dark hover:shadow-md;
+    @apply active:opacity-90;
+  }
+  
+  &--secondary-accent {
+    @apply bg-secondary-accent text-white shadow-sm;
+    @apply focus:ring-2 focus:ring-secondary-accent focus:ring-offset-2;
+    @apply hover:bg-secondary-accent-dark hover:shadow-md;
+    @apply active:opacity-90;
+  }
+  
   &--warn {
-    @apply bg-red-500 text-white border;
-    @apply focus:ring-2 focus:ring-red-600 focus:ring-offset-2;
-    @apply hover:bg-red-600;
+    @apply bg-danger text-white shadow-sm;
+    @apply focus:ring-2 focus:ring-danger focus:ring-offset-2;
+    @apply hover:opacity-90 hover:shadow-md;
+    @apply active:opacity-80;
+  }
+  
+  /* Size variations */
+  &--sm {
+    @apply text-xs px-3 py-1;
+  }
+  
+  &--lg {
+    @apply text-base px-6 py-3;
+  }
+  
+  /* Pill variant */
+  &--pill {
+    @apply rounded-full;
+  }
+  
+  /* Soft variant */
+  &--soft-primary {
+    @apply bg-primary-100 text-primary-700;
+    @apply hover:bg-primary-200;
+    @apply active:bg-primary-300;
+  }
+  
+  &--soft-accent {
+    @apply bg-accent-light text-accent-dark;
+    @apply hover:bg-accent-light hover:opacity-80;
+    @apply active:bg-accent-light active:opacity-70;
   }
 }
 
 .default-ring {
   @include defaultRing();
+}
+
+.btn-icon {
+  @apply flex items-center justify-center;
+  
+  .icon {
+    @apply mr-2;
+  }
+}
+
+/* Floating action button */
+.fab {
+  @apply rounded-full h-12 w-12 flex items-center justify-center shadow-md;
+  @apply bg-primary-gradient text-white;
+  @apply hover:shadow-lg hover:saturate-[1.2];
+  @apply transition-all duration-200;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2;
+  
+  &--small {
+    @apply h-10 w-10;
+  }
 }

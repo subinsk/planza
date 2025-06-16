@@ -54,6 +54,7 @@ import { UserModule } from './user/user.module';
   ],
   controllers: [AppController],
   providers: [
+    // TEMPORARILY RE-ENABLED FOR DEBUGGING - AUTH GUARD
     {
       provide: APP_GUARD,
       useClass: AuthGuard,

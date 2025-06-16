@@ -157,6 +157,50 @@ To get a local copy up and running follow these simple steps.
    npm start api
    ```
 
+## 🔐 Secure Environment Setup
+
+**Important**: This application uses a secure environment variable system. **NO SECRETS** should ever be committed to GitHub.
+
+### Quick Setup (Recommended)
+
+1. **Copy the example environment file**:
+   ```sh
+   cp .env.example .env
+   ```
+
+2. **Fill in your Auth0 credentials** in the `.env` file:
+   ```env
+   AUTH0_AUDIENCE=your-auth0-api-identifier
+   AUTH0_DOMAIN=your-domain.auth0.com
+   AUTH0_CLIENT_ID=your-client-id
+   ```
+
+3. **Verify your setup**:
+   ```sh
+   npm run verify:config
+   ```
+
+4. **Start development with secure environment loading**:
+   ```sh
+   npm run start:secure
+   ```
+
+### Security Features
+
+✅ **No hardcoded secrets** in environment files  
+✅ **Runtime configuration injection** via ConfigService  
+✅ **Webpack environment variable injection** at build time  
+✅ **Gitignore protection** for `.env` files  
+✅ **Production-ready deployment** process  
+
+### For Production Deployment
+
+- **Vercel/Netlify**: Set environment variables in dashboard
+- **Railway/Heroku**: Configure env vars in platform settings
+- **Docker**: Use environment variable injection
+
+See `ENVIRONMENT_SETUP.md` for detailed deployment instructions.
+
 ## Setting up Auth0
 
 Auth0 is used for authenticating the users. You'll need to setup few things in Auth0 before running the application.

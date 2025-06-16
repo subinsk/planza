@@ -14,7 +14,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { PlanzaLoggerService } from '../core/utils/logger.service';
 import { getUserDetails } from '../core/utils/payload.util';
@@ -95,6 +95,50 @@ export class OrganizationService {
   async findAll(query: RequestParams, user: UserPayload) {
     const { userId } = getUserDetails(user);
     const { skip, limit, sort = 'createdAt', order = 'asc' } = parseQuery(query);
+    
+    // Log for debugging
+    const userEmail = user?.['email'] || user?.['https://planza.app/email'];
+    const userSub = user?.['sub'];
+    
+    this.logger.info('findAll', 'Searching for organizations', { 
+      userId, 
+      userEmail,
+      userSub
+    });
+    
+    // First check if user exists in database
+    const localUser = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, email: true }
+    });
+    
+    if (!localUser) {
+      this.logger.info('findAll', 'User not found by ID, trying Auth0 sub/email lookup', { userId, userEmail, userSub });
+      
+      // Use our new lookup function that handles both Auth0 sub and email
+      const foundUser = await this.findUserByAuth0SubOrEmail(userSub || userId, userEmail);
+      
+      if (foundUser) {
+        this.logger.info('findAll', 'Found user by lookup, using local user ID', { 
+          originalUserId: userId, 
+          actualUserId: foundUser.id 
+        });
+        
+        return await this.findOrganizationsByUserId(foundUser.id, { skip, limit, sort, order });
+      }
+      
+      this.logger.error('findAll', `User not found in database: userId=${userId}, userEmail=${userEmail}, userSub=${userSub}`);
+      return {
+        payload: [],
+        meta: { count: 0 }
+      };
+    }
+    
+    // User exists, proceed with normal query
+    return await this.findOrganizationsByUserId(userId, { skip, limit, sort, order });
+  }
+
+  private async findOrganizationsByUserId(userId: string, { skip, limit, sort, order }) {
     const where: Prisma.OrganizationWhereInput = {
       OR: [
         {
@@ -109,6 +153,7 @@ export class OrganizationService {
         },
       ],
     };
+    
     try {
       const count$ = this.prisma.organization.count({
         where,
@@ -136,6 +181,12 @@ export class OrganizationService {
         },
       });
       const [payload, count] = await Promise.all([orgs$, count$]);
+      
+      this.logger.info('findOrganizationsByUserId', 'Found organizations', { 
+        userId, 
+        count: payload.length 
+      });
+      
       return {
         payload,
         meta: {
@@ -143,7 +194,7 @@ export class OrganizationService {
         },
       };
     } catch (error) {
-      this.logger.error('findAll', 'Failed to fetch orgs', error);
+      this.logger.error('findOrganizationsByUserId', 'Failed to fetch orgs', error);
       throw new InternalServerErrorException();
     }
   }
@@ -485,6 +536,36 @@ export class OrganizationService {
       this.logger.error('getOrgDetail', 'Something went wrong', error);
       throw new InternalServerErrorException('Something went wrong');
     }
+  }
+
+  private async findUserByAuth0SubOrEmail(auth0Sub: string, email?: string): Promise<User | null> {
+    this.logger.info('findUserByAuth0SubOrEmail', 'Looking up user', { auth0Sub, email });
+    
+    let user = null;
+    
+    // First try to find by email if available
+    if (email) {
+      user = await this.prisma.user.findUnique({
+        where: { email },
+        select: { id: true, email: true, firstName: true, lastName: true }
+      });
+      
+      if (user) {
+        this.logger.info('findUserByAuth0SubOrEmail', 'Found user by email', { userId: user.id, email });
+        return user;
+      }
+    }
+    
+    // If no user found by email, try to extract email from Auth0 sub
+    // This is a fallback for when the JWT doesn't contain the email
+    if (auth0Sub && auth0Sub.startsWith('auth0|')) {
+      this.logger.info('findUserByAuth0SubOrEmail', 'User not found by email, Auth0 sub lookup not implemented yet', { auth0Sub });
+      // TODO: In the future, we could query Auth0 Management API to get user email
+      // or store the Auth0 sub in our database
+    }
+    
+    this.logger.info('findUserByAuth0SubOrEmail', 'User not found', { auth0Sub, email });
+    return null;
   }
 }
 

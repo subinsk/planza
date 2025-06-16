@@ -43,6 +43,17 @@
 <body>
       <planza-root></planza-root>
       <script async data-domain="Planza.adi.so" src="https://analytics.adi.so/js/script.js"></script>
+      
+      <!-- Auth0 Debug Helper - Development only -->
+      <script>
+        // Only load the debug helper in development environments
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+          const script = document.createElement('script');
+          script.src = '/assets/auth0-debug.js';
+          script.type = 'text/javascript';
+          document.body.appendChild(script);
+        }
+      </script>
 </body>
 
 </html>

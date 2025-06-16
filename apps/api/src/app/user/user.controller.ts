@@ -51,9 +51,18 @@ export class UserController {
   @Get('auth')
   getUserDetails(@Req() req: Request) {
     const sessionToken = req.headers['x-session-token'] as string;
-    if (!sessionToken) {
+    const authHeader = req.headers['authorization'] as string;
+    
+    if (!sessionToken && !authHeader) {
       throw new ForbiddenException('Not enough permissions');
     }
+    
+    // For local development: also accept Auth0 JWT tokens
+    if (!sessionToken && authHeader?.startsWith('Bearer ')) {
+      const auth0Token = authHeader.replace('Bearer ', '');
+      return this.userService.getUserDetailsFromAuth0Token(auth0Token);
+    }
+    
     return this.userService.getUserDetails(sessionToken);
   }
 

@@ -8,6 +8,7 @@ export class PlanzaLoggerService {
     const logger = new Logger(context);
     return {
       error: this.error(logger),
+      info: this.info(logger),
     };
   }
 
@@ -15,6 +16,11 @@ export class PlanzaLoggerService {
     // if (error) this.client.instance().captureException(error);
     // else this.client.instance().captureMessage(`${operation.toUpperCase()} --> ${message}`, Severity.Error);
     return logger.error(`${operation.toUpperCase()} --> ${message}`, error);
+  };
+
+  info = (logger: Logger) => (operation: string, message: string, context?: Record<string, unknown>) => {
+    const contextStr = context ? ` | Context: ${JSON.stringify(context)}` : '';
+    return logger.log(`${operation.toUpperCase()} --> ${message}${contextStr}`);
   };
 }
 

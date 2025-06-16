@@ -7,10 +7,12 @@ export const environment = {
   baseURL: 'http://localhost:4200',
   api: 'http://localhost:3333/api',
   auth: {
-    audience: 'planza-api',
-    domain: 'dev-2nisamv9.us.auth0.com',
-    clientId: 'Vo9QfkcZjyuldepohhcvgLzu7uGUa6C9',
-    redirectUri: window.location.origin,
+    // Auth config will be loaded at runtime via ConfigService
+    // NO SECRETS should be hardcoded here
+    audience: 'https://planza.app/api',
+    domain: '',
+    clientId: '',
+    redirectUri: window.location.origin + '/auth/callback',
   },
 };
 

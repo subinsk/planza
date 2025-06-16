@@ -1,0 +1,26 @@
+button[type="button"] {
+  height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  
+  span {
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+/* Container spacing */
+.lg\:bg-white {
+  padding: 2rem !important;
+}
+
+/* Shadow improvements */
+.shadow-sm-colored {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+.bg-surface {
+  background-color: #f9fafb;
+}
