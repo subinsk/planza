@@ -7,7 +7,7 @@ export interface UserBase {
   firstName: string;
   lastName: string;
   image: string;
-  auth0Sub?: string | null;
+  auth0Sub: string | null;
 }
 
 export interface User extends UserBase, DocDates {
