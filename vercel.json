@@ -3,11 +3,6 @@
   "env": {
     "NPM_CONFIG_LEGACY_PEER_DEPS": "true"
   },
-  "functions": {
-    "apps/api/src/main.ts": {
-      "runtime": "nodejs20.x"
-    }
-  },
   "builds": [
     {
       "src": "package.json",
