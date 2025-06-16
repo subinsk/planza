@@ -13,3 +13,5 @@ debug-*.js
 debug-*.html
 test-*.js
 *.sql
+
+.vercel

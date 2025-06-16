@@ -1,0 +1,14 @@
+[build]
+builder = "nixpacks"
+
+[deploy]
+healthcheckPath = "/api/ping"
+healthcheckTimeout = 100
+restartPolicyType = "on_failure"
+
+[build.environment]
+NODE_ENV = "production"
+
+[deploy.environment]
+NODE_ENV = "production"
+PORT = "3333"

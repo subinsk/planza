@@ -15,7 +15,7 @@
       "dest": "/index.html"
     }
   ],
-  "buildCommand": "npx nx build planza --prod",
+  "buildCommand": "npm run build:planza",
   "github": {
     "silent": true
   }
