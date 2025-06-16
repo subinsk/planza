@@ -96,7 +96,6 @@ export class InviteService {
         select: {
           orgId: true,
         },
-        rejectOnNotFound: true,
       });
       if (org.id !== invite.orgId) {
         this.logger.error('cancelInvite', `Org doesn't match`);

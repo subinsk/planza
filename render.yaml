@@ -1,5 +1,5 @@
 # Render.com deployment configuration
-# This file tells Render how to build and run your Node.js application
+# Simplified build to avoid TypeScript issues
 
 # Build Command
 buildCommand: npm run deploy:render

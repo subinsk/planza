@@ -38,10 +38,8 @@ export class BoardsService {
               members: {
                 where: {
                   id: userId,
-                },
-              },
-            },
-            rejectOnNotFound: true,
+                },            },
+          },
           });
           const userPartOfProject = projectData?.members.length > 0;
           if (!userPartOfProject) {
@@ -160,7 +158,6 @@ export class BoardsService {
         where: {
           id,
         },
-        rejectOnNotFound: true,
         select: {
           ...GET_SINGLE_BOARD_SELECT,
           tasks: {
