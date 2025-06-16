@@ -1,0 +1,26 @@
+# Render.com deployment configuration
+# This file tells Render how to build and run your Node.js application
+
+# Build Command
+buildCommand: npm run deploy:render
+
+# Start Command  
+startCommand: npm run start:production
+
+# Environment
+environment: node
+
+# Node.js version
+nodeVersion: 20.x
+
+# Health check endpoint
+healthCheckPath: /api/ping
+
+# Auto-deploy
+autoDeploy: true
+
+# Region (choose closest to your users)
+region: oregon # or virginia, frankfurt, singapore
+
+# Service type
+type: web
