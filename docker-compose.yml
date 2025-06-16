@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:alpine
+    volumes:
+      - db_data:/var/lib/postgres
+    restart: always
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: planza
+volumes:
+  db_data:
+    name: planza-db

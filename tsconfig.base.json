@@ -1,0 +1,39 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2017", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@planza/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@planza/web/auth": ["libs/web/auth/src/index.ts"],
+      "@planza/web/boards": ["libs/web/boards/src/index.ts"],
+      "@planza/web/boards/*": ["libs/web/boards/src/lib/*"],
+      "@planza/web/home": ["libs/web/home/src/index.ts"],
+      "@planza/web/orgs": ["libs/web/orgs/src/index.ts"],
+      "@planza/web/orgs/*": ["libs/web/orgs/src/lib/*"],
+      "@planza/web/profile": ["libs/web/profile/src/index.ts"],
+      "@planza/web/projects": ["libs/web/projects/src/index.ts"],
+      "@planza/web/projects/*": ["libs/web/projects/src/lib/*"],
+      "@planza/web/settings": ["libs/web/settings/src/index.ts"],
+      "@planza/web/tasks": ["libs/web/tasks/src/index.ts"],
+      "@planza/web/tasks/*": ["libs/web/tasks/src/lib/*"],
+      "@planza/web/ui": ["libs/web/ui/src/index.ts"],
+      "@planza/web/ui/*": ["libs/web/ui/src/*"],
+      "@planza/web/users": ["libs/web/users/src/index.ts"],
+      "@planza/web/users/*": ["libs/web/users/src/lib/*"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

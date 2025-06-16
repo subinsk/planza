@@ -1,0 +1,422 @@
+{
+  "version": 1,
+  "projects": {
+    "api": {
+      "root": "apps/api",
+      "sourceRoot": "apps/api/src",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/api",
+            "main": "apps/api/src/main.ts",
+            "tsConfig": "apps/api/tsconfig.app.json"
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/api/src/environments/environment.ts",
+                  "with": "apps/api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "api:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/api/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/api"],
+          "options": {
+            "jestConfig": "apps/api/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": []
+    },
+    "api-interfaces": {
+      "root": "libs/api-interfaces",
+      "sourceRoot": "libs/api-interfaces/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api-interfaces/**/*.ts"]
+          }
+        }
+      },
+      "tags": []
+    },
+    "planza": {
+      "projectType": "application",
+      "root": "apps/planza",
+      "sourceRoot": "apps/planza/src",
+      "prefix": "planza",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/planza",
+            "index": "apps/planza/src/index.html",
+            "main": "apps/planza/src/main.ts",
+            "polyfills": "apps/planza/src/polyfills.ts",
+            "tsConfig": "apps/planza/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": ["apps/planza/src/favicon.ico", "apps/planza/src/assets"],
+            "styles": ["apps/planza/src/styles.scss"],
+            "stylePreprocessorOptions": {
+              "includePaths": ["apps/planza/src/styles", "apps/planza/src/styles/partials"]
+            },
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "apps/planza/src/environments/environment.ts",
+                  "with": "apps/planza/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "planza:build:production"
+            },
+            "development": {
+              "browserTarget": "planza:build:development"
+            }
+          },
+          "defaultConfiguration": "development",
+          "options": {
+            "proxyConfig": "apps/planza/proxy.conf.json"
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "planza:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/planza/src/**/*.ts", "apps/planza/src/**/*.html"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/planza"],
+          "options": {
+            "jestConfig": "apps/planza/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": []
+    },
+    "planza-e2e": {
+      "root": "apps/planza-e2e",
+      "sourceRoot": "apps/planza-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/planza-e2e/cypress.json",
+            "tsConfig": "apps/planza-e2e/tsconfig.e2e.json",
+            "devServerTarget": "planza:serve:development"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "planza:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/planza-e2e/**/*.{js,ts}"]
+          }
+        }
+      },
+      "tags": [],
+      "implicitDependencies": ["planza"]
+    },
+    "web-auth": {
+      "projectType": "library",
+      "root": "libs/web/auth",
+      "sourceRoot": "libs/web/auth/src",
+      "prefix": "planza",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/auth"],
+          "options": {
+            "jestConfig": "libs/web/auth/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/auth/src/**/*.ts", "libs/web/auth/src/**/*.html"]
+          }
+        }
+      },
+      "tags": []
+    },
+    "web-boards": {
+      "projectType": "library",
+      "root": "libs/web/boards",
+      "sourceRoot": "libs/web/boards/src",
+      "prefix": "planza",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/boards"],
+          "options": {
+            "jestConfig": "libs/web/boards/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/boards/src/**/*.ts", "libs/web/boards/src/**/*.html"]
+          }
+        }
+      },
+      "tags": []
+    },
+    "web-home": {
+      "projectType": "library",
+      "root": "libs/web/home",
+      "sourceRoot": "libs/web/home/src",
+      "prefix": "planza",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/home"],
+          "options": {
+            "jestConfig": "libs/web/home/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/home/src/**/*.ts", "libs/web/home/src/**/*.html"]
+          }
+        }
+      },
+      "tags": []
+    },
+    "web-orgs": {
+      "projectType": "library",
+      "root": "libs/web/orgs",
+      "sourceRoot": "libs/web/orgs/src",
+      "prefix": "planza",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/orgs"],
+          "options": {
+            "jestConfig": "libs/web/orgs/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/orgs/src/**/*.ts", "libs/web/orgs/src/**/*.html"]
+          }
+        }
+      },
+      "tags": []
+    },
+    "web-profile": {
+      "projectType": "library",
+      "root": "libs/web/profile",
+      "sourceRoot": "libs/web/profile/src",
+      "prefix": "planza",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/profile"],
+          "options": {
+            "jestConfig": "libs/web/profile/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/profile/src/**/*.ts", "libs/web/profile/src/**/*.html"]
+          }
+        }
+      },
+      "tags": []
+    },
+    "web-projects": {
+      "projectType": "library",
+      "root": "libs/web/projects",
+      "sourceRoot": "libs/web/projects/src",
+      "prefix": "planza",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/projects"],
+          "options": {
+            "jestConfig": "libs/web/projects/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/projects/src/**/*.ts", "libs/web/projects/src/**/*.html"]
+          }
+        }
+      },
+      "tags": []
+    },
+    "web-settings": {
+      "projectType": "library",
+      "root": "libs/web/settings",
+      "sourceRoot": "libs/web/settings/src",
+      "prefix": "planza",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/settings"],
+          "options": {
+            "jestConfig": "libs/web/settings/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/settings/src/**/*.ts", "libs/web/settings/src/**/*.html"]
+          }
+        }
+      },
+      "tags": []
+    },
+    "web-tasks": {
+      "projectType": "library",
+      "root": "libs/web/tasks",
+      "sourceRoot": "libs/web/tasks/src",
+      "prefix": "planza",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/tasks"],
+          "options": {
+            "jestConfig": "libs/web/tasks/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/tasks/src/**/*.ts", "libs/web/tasks/src/**/*.html"]
+          }
+        }
+      },
+      "tags": []
+    },
+    "web-ui": {
+      "projectType": "library",
+      "root": "libs/web/ui",
+      "sourceRoot": "libs/web/ui/src",
+      "prefix": "planza",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/ui"],
+          "options": {
+            "jestConfig": "libs/web/ui/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/ui/src/**/*.ts", "libs/web/ui/src/**/*.html"]
+          }
+        }
+      },
+      "tags": []
+    },
+    "web-users": {
+      "projectType": "library",
+      "root": "libs/web/users",
+      "sourceRoot": "libs/web/users/src",
+      "prefix": "planza",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/users"],
+          "options": {
+            "jestConfig": "libs/web/users/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/users/src/**/*.ts", "libs/web/users/src/**/*.html"]
+          }
+        }
+      },
+      "tags": []
+    }
+  }
+}
+

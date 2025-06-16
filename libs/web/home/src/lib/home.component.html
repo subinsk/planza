@@ -1,0 +1,145 @@
+<section class="px-4 mt-10 mb-10 md:px-8">
+  <p class="text-gray-500">Welcome,</p>
+  <ng-container *ngIf="user$ | async as user">
+    <h2 class="text-2xl font-bold">{{user?.given_name}}</h2>
+    <h3 class="">You are logged into <span class="text-lg font-bold">{{user?.org?.name}}</span></h3>
+  </ng-container>
+</section>
+<section class="grid px-4 mt-10 md:px-8 cols-1 md:grid-cols-2 lg:grid-cols-3 md:gap-8">
+  <div class="mb-10 md:mb-0">
+    <planza-section-header title="Recent Tasks"></planza-section-header>
+    <ng-container [ngSwitch]="(recentTasksLoading$ | async)?.type">
+      <ng-container *ngSwitchCase="'SUCCESS'">
+        <ng-container *ngIf="(recentTasks$ | async) as recentTasks">
+          <ng-container *ngIf="recentTasks.length > 0;else noData">
+            <planza-task-list [data]="recentTasks"></planza-task-list>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngSwitchCase="'LOADING'">
+        <ng-container *ngTemplateOutlet="tasksLoading"></ng-container>
+      </ng-container>
+      <ng-container *ngSwitchCase="'ERROR'">
+
+      </ng-container>
+    </ng-container>
+  </div>
+  <div>
+    <planza-section-header title="Higher Priority Tasks"></planza-section-header>
+    <ng-container [ngSwitch]="(recentTasksLoading$ | async)?.type">
+      <ng-container *ngSwitchCase="'SUCCESS'">
+        <ng-container *ngIf="(hightPriorityTasks$ | async) as hightPriorityTasks">
+          <ng-container *ngIf="hightPriorityTasks.length > 0;else noData">
+            <planza-task-list [data]="hightPriorityTasks"></planza-task-list>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngSwitchCase="'LOADING'">
+        <ng-container *ngTemplateOutlet="tasksLoading"></ng-container>
+      </ng-container>
+      <ng-container *ngSwitchCase="'ERROR'">
+
+      </ng-container>
+    </ng-container>
+  </div>
+</section>
+<section class="px-4 mt-10 md:px-8 projects__container">
+  <planza-section-header title="Projects"></planza-section-header>
+  <ng-container [ngSwitch]="(projectsLoading$ | async)?.type">
+    <ng-container *ngSwitchCase="'SUCCESS'">
+      <ng-container *ngIf="(projects$ | async) as projects">
+        <ng-container *ngIf="projects.length > 0;else noData">
+          <div class="projects__list">
+            <ng-container *ngFor="let project of projects">
+              <planza-project-mini-card [data]="project"></planza-project-mini-card>
+            </ng-container>
+          </div>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'LOADING'">
+      <div class="projects__list">
+        <ng-container *ngFor="let item of [1]">
+          <planza-loading-card height="130px">
+            <div class="flex flex-col justify-between h-full">
+              <header class="flex flex-col space-y-1">
+                <shimmer height="24px" width="60%" [rounded]="true"></shimmer>
+                <shimmer height="14px" [rounded]="true"></shimmer>
+                <shimmer height="14px" width="50%" [rounded]="true"></shimmer>
+              </header>
+              <footer class="flex items-center justify-between">
+                <shimmer height="16px" width="50%" [rounded]="true"></shimmer>
+              </footer>
+            </div>
+          </planza-loading-card>
+        </ng-container>
+      </div>
+    </ng-container>
+    <ng-container *ngSwitchCase="'ERROR'">
+      <!-- TODO -->
+    </ng-container>
+  </ng-container>
+</section>
+<section class="px-4 mt-10 mb-12 md:px-8 projects__container">
+  <planza-section-header title="Boards"></planza-section-header>
+  <ng-container [ngSwitch]="(boardsLoading$ | async)?.type">
+    <ng-container *ngSwitchCase="'SUCCESS'">
+      <ng-container *ngIf="(boards$ | async) as boards">
+        <ng-container *ngIf="boards.length > 0;else noData">
+          <div class="projects__list">
+            <ng-container *ngFor="let board of boards">
+              <planza-board-mini-card [data]="board"></planza-board-mini-card>
+            </ng-container>
+          </div>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'LOADING'">
+      <div class="projects__list">
+        <ng-container *ngFor="let item of [1]">
+          <planza-loading-card height="106px">
+            <div class="flex flex-col justify-between h-full">
+              <header class="flex flex-col space-y-1">
+                <shimmer height="24px" width="60%" [rounded]="true"></shimmer>
+                <shimmer height="14px" width="50%" [rounded]="true"></shimmer>
+              </header>
+              <footer class="flex items-center justify-between">
+                <shimmer height="14px" width="50%" [rounded]="true"></shimmer>
+              </footer>
+            </div>
+          </planza-loading-card>
+        </ng-container>
+      </div>
+    </ng-container>
+    <ng-container *ngSwitchCase="'ERROR'">
+      <!-- TODO -->
+    </ng-container>
+  </ng-container>
+</section>
+
+
+<ng-template #tasksLoading>
+  <div>
+    <ul class="border rounded-md shadow-sm">
+      <li *ngFor="let task of [1]" [style.height]="'65px'"
+          class="p-2 transition-all duration-200 bg-white border-b cursor-pointer group first:rounded-t-md last:rounded-b-md last:border-b-0 hover:bg-gray-50">
+        <header>
+          <shimmer height="16px" width="60%" [rounded]="true"></shimmer>
+        </header>
+        <footer class="flex items-center justify-between mt-2 text-xs text-gray-400">
+          <shimmer height="14px" width="40%" [rounded]="true"></shimmer>
+          <shimmer height="14px" width="30%" [rounded]="true"></shimmer>
+        </footer>
+      </li>
+    </ul>
+  </div>
+</ng-template>
+
+<ng-template #noData let-message="message">
+  <div class="flex justify-center mt-10">
+    <div class="flex flex-col items-center">
+      <img src="assets/images/nothing.svg" alt="No Items" width="250" height="187.5" />
+      <p class="text-gray-600">{{message ?? 'No items found'}}</p>
+    </div>
+  </div>
+</ng-template>

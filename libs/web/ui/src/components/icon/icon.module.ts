@@ -1,0 +1,61 @@
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import {
+  RemixIconModule,
+  RiAddCircleLine,
+  RiAddLine,
+  RiArrowDownSLine,
+  RiArrowRightLine,
+  RiAttachment2,
+  RiBuildingLine,
+  RiCheckboxLine,
+  RiCheckLine,
+  RiCloseLine,
+  RiDownloadLine,
+  RiDragMoveLine,
+  RiFolder4Line,
+  RiGithubLine,
+  RiHome5Line,
+  RiInformationLine,
+  RiMenuLine,
+  RiMessage3Line,
+  RiMore2Fill,
+  RiNotification2Line,
+  RiTableLine,
+  RiTwitterLine,
+  RiUserSettingsLine,
+  RiUserShared2Line,
+} from 'angular-remix-icon';
+const icons = {
+  RiGithubLine,
+  RiTwitterLine,
+  RiMenuLine,
+  RiDownloadLine,
+  RiInformationLine,
+  RiNotification2Line,
+  RiUserSettingsLine,
+  RiUserShared2Line,
+  RiAddCircleLine,
+  RiArrowRightLine,
+  RiHome5Line,
+  RiTableLine,
+  RiFolder4Line,
+  RiCheckboxLine,
+  RiBuildingLine,
+  RiArrowDownSLine,
+  RiMore2Fill,
+  RiAddLine,
+  RiDragMoveLine,
+  RiCloseLine,
+  RiMessage3Line,
+  RiAttachment2,
+  RiCheckLine,
+};
+
+@NgModule({
+  declarations: [],
+  imports: [CommonModule, RemixIconModule.configure(icons)],
+  exports: [RemixIconModule],
+})
+export class IconModule {}
+

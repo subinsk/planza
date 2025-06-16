@@ -1,0 +1,231 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+}
+
+model User {
+  id                String         @id @default(cuid())
+  email             String         @unique
+  firstName         String
+  lastName          String
+  password          String
+  image             String?
+  blocked           Boolean        @default(false)
+  verified          Boolean        @default(false)
+  orgs              Organization[]
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  taskAssignedBy    Task[]         @relation("assignedBy")
+  taskAssignee      Task[]         @relation("assignees")
+  subTaskAssignedBy SubTask[]      @relation("subTaskAssignedBy")
+  subTaskAssignee   SubTask[]      @relation("subTaskAssignees")
+  projects          Project[]      @relation("members")
+  tasks             Task[]
+  subTasks          SubTask[]
+  comments          Comment[]
+  boards            Board[]
+  projectsCreated   Project[]      @relation("projectCreatedBy")
+  orgsCreated       Organization[] @relation("orgCreatedBy")
+  roles             UserRoleOrg[]
+  userInvites        UserInvite[]
+  attachments       Attachment[]
+}
+
+model Organization {
+  id          String        @id @default(cuid())
+  name        String
+  slug        String        @unique
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  createdBy   User          @relation("orgCreatedBy", fields: [createdById], references: [id], onDelete: Cascade)
+  createdById String
+  members     User[]
+  projects    Project[]
+  tasks       Task[]
+  tags        Tag[]
+  boards      Board[]
+  userRoleOrgs UserRoleOrg[]
+  userInvites  UserInvite[]
+  attachments  Attachment[]
+}
+
+model Project {
+  id          String       @id @default(cuid())
+  name        String
+  slug        String       @unique
+  description String
+  org         Organization @relation(fields: [orgId], references: [id])
+  orgId       String
+  members     User[]       @relation("members")
+  createdBy   User         @relation("projectCreatedBy", fields: [createdById], references: [id])
+  createdById String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  tasks       Task[]
+  boards      Board[]
+}
+
+model Board {
+  id          String       @id @default(cuid())
+  name        String
+  description String
+  lists       Json
+  org         Organization @relation(fields: [orgId], references: [id])
+  orgId       String
+  createdBy   User         @relation(fields: [createdById], references: [id])
+  createdById String
+  project     Project      @relation(fields: [projectId], references: [id])
+  projectId   String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  tasks       Task[]
+}
+
+model Task {
+  id           String       @id @default(cuid())
+  title        String
+  description  String?
+  list         String
+  project      Project      @relation(fields: [projectId], references: [id])
+  projectId    String
+  board        Board        @relation(fields: [boardId], references: [id])
+  boardId      String
+  org          Organization @relation(fields: [orgId], references: [id])
+  orgId        String
+  assignedBy   User?        @relation("assignedBy", fields: [assignedById], references: [id])
+  assignedById String?
+  assignees    User[]       @relation("assignees")
+  tags         Tag[]
+  priority     Priority
+  startDate    DateTime?
+  dueDate      DateTime?
+  createdBy    User         @relation(fields: [createdById], references: [id])
+  createdById  String
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  completed    Boolean      @default(false)
+  subTasks     SubTask[]
+  comments     Comment[]
+  attachments   Attachment[]
+}
+
+model SubTask {
+  id           String    @id @default(cuid())
+  title        String
+  description  String?
+  assignedBy   User      @relation("subTaskAssignedBy", fields: [assignedById], references: [id])
+  assignedById String
+  assignees    User[]    @relation("subTaskAssignees")
+  stateDate    DateTime?
+  dueDate      DateTime?
+  createdBy    User      @relation(fields: [createdById], references: [id])
+  createdById  String
+  priority     Priority
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  completed    Boolean   @default(false)
+  task         Task      @relation(fields: [taskId], references: [id])
+  taskId       String
+}
+
+model Tag {
+  id        String       @id @default(cuid())
+  name      String
+  org       Organization @relation(fields: [orgId], references: [id])
+  orgId     String
+  task      Task?        @relation(fields: [taskId], references: [id])
+  taskId    String?
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  @@unique([name, orgId])
+}
+
+model Comment {
+  id          String   @id @default(cuid())
+  content     String
+  reactions   Json?
+  createdBy   User     @relation(fields: [createdById], references: [id])
+  createdById String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  task        Task?    @relation(fields: [taskId], references: [id])
+  taskId      String?
+}
+
+model Role {
+  id          String        @id @default(cuid())
+  name        String        @unique
+  label       String        @unique
+  permissions Json
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  userRoleOrg UserRoleOrg[]
+  userInvite  UserInvite[]
+}
+
+model UserRoleOrg {
+  id        String       @id @default(cuid())
+  org       Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  orgId     String
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  role      Role         @relation(fields: [roleId], references: [id])
+  roleId    String
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @default(now()) @updatedAt
+}
+
+// model LogTrail {
+//   id     String       @id @default(cuid())
+//   org    Organization @relation(fields: [orgId], references: [id])
+//   orgId  String
+//   user   User         @relation(fields: [userId], references: [id])
+//   userId String
+//   project      Project      @relation(fields: [projectId], references: [id])
+//   projectId    String
+//   board        Board        @relation(fields: [boardId], references: [id])
+//   boardId      String
+//   action   Json
+//   content  Json
+//   createdAt   DateTime      @default(now())
+//   updatedAt   DateTime      @updatedAt
+// }
+
+model UserInvite {
+  id          String       @id @default(cuid())
+  email       String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  org         Organization @relation(fields: [orgId], references: [id])
+  orgId       String
+  invitedBy   User         @relation(fields: [invitedById], references: [id])
+  invitedById String
+  role        Role         @relation(fields: [roleId], references: [id])
+  roleId      String
+}
+
+model Attachment {
+  id          String       @id @default(cuid())
+  label       String?
+  path        String
+  org         Organization @relation(fields: [orgId], references: [id])
+  orgId       String
+  createdBy   User         @relation(fields: [createdById], references: [id])
+  createdById String
+  createdAt   DateTime     @default(now())
+  task        Task?        @relation(fields: [taskId], references: [id])
+  taskId      String?
+}
+
+enum Priority {
+  Lowest
+  Low
+  Medium
+  High
+  Highest
+}

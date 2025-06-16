@@ -1,0 +1,102 @@
+<planza-page-header [title]="(orgDetails$ | async)?.name" [loading]="(orgDetailLoading$|async)?.type === 'LOADING'"
+                     [breadcrumbs]="breadcrumbs"></planza-page-header>
+<ng-container>
+  <section class="px-8 orgs__container">
+    <planza-section-header title="Projects"></planza-section-header>
+    <ng-container [ngSwitch]="(orgDetailLoading$ | async)?.type">
+      <ng-container *ngSwitchCase="'SUCCESS'">
+        <div class="orgs__list">
+          <ng-container *ngTemplateOutlet="addProject"></ng-container>
+          <ng-container *ngFor="let project of (orgDetails$ | async)?.projects">
+            <planza-project-card [data]="project" (clicked)="handleProjectCardEvents($event, project)">
+            </planza-project-card>
+          </ng-container>
+        </div>
+      </ng-container>
+      <ng-container *ngSwitchCase="'LOADING'">
+        <div class="orgs__list">
+          <ng-container *ngTemplateOutlet="addProject"></ng-container>
+          <planza-loading-card height="194px">
+            <div class="flex flex-col justify-between h-full">
+              <header class="flex flex-col space-y-1">
+                <shimmer height="24px" width="60%" [rounded]="true"></shimmer>
+                <shimmer height="14px" [rounded]="true"></shimmer>
+                <shimmer height="14px" width="50%" [rounded]="true"></shimmer>
+              </header>
+              <div class="flex items-center -space-x-4">
+                <shimmer width="40px" height="40px" borderRadius="50%"></shimmer>
+                <shimmer width="40px" height="40px" borderRadius="50%"></shimmer>
+                <shimmer width="40px" height="40px" borderRadius="50%"></shimmer>
+              </div>
+              <footer class="flex items-center justify-between">
+                <shimmer height="16px" width="50%" [rounded]="true"></shimmer>
+              </footer>
+            </div>
+          </planza-loading-card>
+        </div>
+      </ng-container>
+      <ng-container *ngSwitchCase="'ERROR'">
+
+      </ng-container>
+    </ng-container>
+  </section>
+  <section class="px-8 orgs__container">
+    <planza-section-header title="Members"></planza-section-header>
+    <ng-container [ngSwitch]="(orgDetailLoading$ | async)?.type">
+      <ng-container *ngSwitchCase="'SUCCESS'">
+        <div class="orgs__list">
+          <ng-container *ngFor="let member of (orgDetails$ | async)?.members">
+            <planza-mini-user-card [data]="member" [disabled]="[(orgDetails$ | async)?.createdBy?.id]"
+                                    (removed)="removeMember($event)">
+            </planza-mini-user-card>
+          </ng-container>
+        </div>
+      </ng-container>
+      <ng-container *ngSwitchCase="'LOADING'">
+        <div class="orgs__list">
+          <planza-loading-card height="84px">
+            <div class="flex items-center space-x-2">
+              <div style="width: 50px;height: 50px">
+                <shimmer height="50px" width="50px" borderRadius="50%"></shimmer>
+              </div>
+              <div class="w-full pt-1">
+                <shimmer height="20px" width="70%" [rounded]="true"></shimmer>
+                <shimmer height="14px" width="50%" [rounded]="true"></shimmer>
+              </div>
+            </div>
+          </planza-loading-card>
+        </div>
+      </ng-container>
+      <ng-container *ngSwitchCase="'ERROR'">
+
+      </ng-container>
+    </ng-container>
+
+    <footer class="mt-4">
+      <button btn size="sm" [tippy]="addAssignees" placement="bottom-start" variation="menu" class="flex items-center">
+        <rmx-icon class="icon-sm" name="add-line"></rmx-icon>
+        <p class="text-sm">Add Members</p>
+      </button>
+    </footer>
+  </section>
+</ng-container>
+
+<ng-template #addAssignees let-hide>
+  <planza-user-select [hide]="hide" [disabled]="[(loggedInUser$ | async)?.userId]" [users]="(users$ | async)"
+                       [selectedMembers]="selectedMembers" (clicked)="handleUserSelectEvent($event)">
+  </planza-user-select>
+</ng-template>
+
+
+<ng-template #addProject>
+  <article (click)="openProjectModal()"
+           class="grid p-4 transition-all duration-200 ease-in bg-gray-100 border-2 border-transparent border-dashed rounded-md shadow-sm cursor-pointer hover:bg-gray-200 hover:border-primary place-items-center"
+           style="min-height: 112px;">
+    <div class="flex items-center space-x-2 text-gray-500">
+      <div class="bg-white border rounded-md shadow-sm ">
+        <rmx-icon class="w-5 h-5" name="add-line"></rmx-icon>
+      </div>
+      <p class="text-sm">New Project</p>
+    </div>
+  </article>
+</ng-template>
