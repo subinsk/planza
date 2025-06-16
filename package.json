@@ -24,7 +24,7 @@
     "start:secure": "node -r dotenv/config node_modules/.bin/ng serve --project=planza",
     "verify:config": "node scripts/verify-config.js",
     "start:cache": "NG_PERSISTENT_BUILD_CACHE=1 ng serve",
-    "build": "ng build",
+    "build": "nx build planza --prod",
     "test": "ng test",
     "lint": "nx workspace-lint && ng lint",
     "e2e": "ng e2e",
