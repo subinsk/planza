@@ -11,7 +11,7 @@ export const BUTTON_SIZE_PADDINGS = {
 };
 
 @Component({
-  selector: 'button[btn], a[btn]',
+  selector: 'button[btn], a[btn], button[planza-btn], a[planza-btn]', // Support both old and new selectors
   template: ` <ng-content></ng-content>`,
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,

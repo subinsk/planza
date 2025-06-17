@@ -28,6 +28,12 @@
       }
     },
     {
+      "files": ["**/button/button.component.ts"],
+      "rules": {
+        "@angular-eslint/component-selector": "off"
+      }
+    },
+    {
       "files": ["*.html"],
       "extends": ["plugin:@nrwl/nx/angular-template"],
       "rules": {}

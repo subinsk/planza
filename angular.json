@@ -72,7 +72,7 @@
       "prefix": "planza",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-builders/custom-webpack:browser",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/apps/planza",
@@ -86,7 +86,10 @@
             "stylePreprocessorOptions": {
               "includePaths": ["apps/planza/src/styles", "apps/planza/src/styles/partials"]
             },
-            "scripts": []
+            "scripts": [],
+            "customWebpackConfig": {
+              "path": "apps/planza/webpack.config.js"
+            }
           },
           "configurations": {
             "production": {
@@ -122,7 +125,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular-builders/custom-webpack:dev-server",
           "configurations": {
             "production": {
               "browserTarget": "planza:build:production"

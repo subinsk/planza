@@ -30,8 +30,7 @@ export interface AppConfig {
 })
 export class ConfigService {
   private config: AppConfig | null = null;
-  
-  /**
+    /**
    * Get the application configuration, prioritizing runtime injected environment variables
    * and falling back to environment.ts only for non-sensitive defaults
    * @returns The complete application configuration
@@ -39,27 +38,35 @@ export class ConfigService {
   getConfig(): AppConfig {
     if (this.config) {
       return this.config;
-    }    // Try to get config from runtime environment variables (injected at build/deploy time)
-    const runtimeEnv = (globalThis as any).__ENV__;
-
-    // Debug env variables
-    console.log('Runtime ENV variables:', runtimeEnv);
-      // Validate runtime environment is available in production
-    if (environment.production && (!runtimeEnv || !runtimeEnv.AUTH0_DOMAIN)) {
-      console.warn('Runtime environment variables are not fully available, using fallback values.');
-      console.log('Available runtime env keys:', runtimeEnv ? Object.keys(runtimeEnv) : 'none');
     }
+
+    // In production builds, webpack injects environment variables into process.env
+    // In development, they come from .env via dotenv
     
+    // Debug env variables
+    console.log('ConfigService: Loading configuration...');
+    console.log('Environment production flag:', environment.production);
+    console.log('Available process.env variables:', {
+      AUTH0_DOMAIN: (process.env as any).AUTH0_DOMAIN,
+      AUTH0_AUDIENCE: (process.env as any).AUTH0_AUDIENCE,
+      AUTH0_CLIENT_ID: (process.env as any).AUTH0_CLIENT_ID,
+      BASE_URL: (process.env as any).BASE_URL,
+      API_URL: (process.env as any).API_URL,
+    });
+
     this.config = {
       production: environment.production,
-      baseURL: runtimeEnv?.BASE_URL || environment.baseURL,
-      api: runtimeEnv?.API_URL || environment.api,
-      auth: {        audience: runtimeEnv?.AUTH0_AUDIENCE || environment.auth.audience,
-        domain: runtimeEnv?.AUTH0_DOMAIN || environment.auth.domain,
-        clientId: runtimeEnv?.AUTH0_CLIENT_ID || environment.auth.clientId,
+      baseURL: (process.env as any).BASE_URL || environment.baseURL,
+      api: (process.env as any).API_URL || environment.api,
+      auth: {
+        audience: (process.env as any).AUTH0_AUDIENCE || environment.auth.audience,
+        domain: (process.env as any).AUTH0_DOMAIN || environment.auth.domain,
+        clientId: (process.env as any).AUTH0_CLIENT_ID || environment.auth.clientId,
         redirectUri: `${window.location.origin}/auth/callback`,
       }
     };
+
+    console.log('Final config:', this.config);
 
     // Additional validation for production environment
     if (environment.production) {

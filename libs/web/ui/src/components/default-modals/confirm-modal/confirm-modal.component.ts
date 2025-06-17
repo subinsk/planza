@@ -18,8 +18,8 @@ export interface ConfirmModalData {
       {{ ref?.data?.body ?? 'Confirm your action as it cannot be reversed. Are you sure that you want to proceed?' }}
     </div>
     <footer class="flex justify-end space-x-4" cdkTrapFocus cdkTrapFocusAutoCapture>
-      <button btn variant="secondary" (click)="ref.close(false)" cdkFocusInitial>Close</button>
-      <button btn [variant]="ref?.data?.primaryActionType ?? 'primary'" (click)="ref.close(true)">
+      <button planza-btn variant="secondary" (click)="ref.close(false)" cdkFocusInitial>Close</button>
+      <button planza-btn [variant]="ref?.data?.primaryActionType ?? 'primary'" (click)="ref.close(true)">
         {{ ref?.data?.primaryAction ?? 'Confirm' }}
       </button>
     </footer>

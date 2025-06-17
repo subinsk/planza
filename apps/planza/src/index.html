@@ -43,17 +43,8 @@
 <body>
       <planza-root></planza-root>
       
-      <!-- Runtime Environment Configuration for Production -->
-      <script>
-        // Inject runtime environment variables for production deployment
-        window.__ENV__ = {
-          AUTH0_DOMAIN: 'planza.us.auth0.com',
-          AUTH0_AUDIENCE: 'https://planza.us.auth0.com/api/v2/',
-          AUTH0_CLIENT_ID: 'YOUR_AUTH0_CLIENT_ID', // This should be replaced during deployment
-          API_URL: 'https://planza-api.onrender.com/api',
-          BASE_URL: 'https://planza-app.vercel.app'
-        };
-      </script>
+      <!-- Runtime Environment Configuration is injected by webpack.DefinePlugin -->
+      <!-- No hardcoded values here - all configuration comes from environment variables -->
       
       <script async data-domain="Planza.adi.so" src="https://analytics.adi.so/js/script.js"></script>
       
