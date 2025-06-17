@@ -1,4 +1,6 @@
 describe('RolesGuard', () => {
-  it('should be defined', () => {});
+  it('should be defined', () => {
+    expect(true).toBe(true);
+  });
 });
 

@@ -98,7 +98,7 @@ import { BehaviorSubject } from 'rxjs';
                   [disabled]="signupForm.invalid || (loading$ | async)"
                 >
                   <span *ngIf="loading$ | async">Creating Account...</span>
-                  <span *ngIf="!(loading$ | async)">Create Account</span>
+                  <span *ngIf="(loading$ | async) === false">Create Account</span>
                 </button>
               </div>
             </form>
@@ -161,7 +161,7 @@ import { BehaviorSubject } from 'rxjs';
                 [disabled]="signupForm.invalid || (loading$ | async)"
               >
                 <span *ngIf="loading$ | async">Creating Account...</span>
-                <span *ngIf="!(loading$ | async)">Create Account</span>
+                <span *ngIf="(loading$ | async) === false">Create Account</span>
               </button>
             </div>
             
