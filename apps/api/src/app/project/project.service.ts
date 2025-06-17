@@ -142,7 +142,6 @@ export class ProjectService {
         where: {
           id,
         },
-        rejectOnNotFound: true,
         select: {
           id: true,
           name: true,
@@ -156,6 +155,11 @@ export class ProjectService {
           members: { select: USER_BASIC_DETAILS },
         },
       });
+      
+      if (!project) {
+        this.logger.error('findOne', 'Project not found');
+        throw new NotFoundException('Project not found');
+      }
     } catch (error) {
       if (error?.name === 'NotFoundError') {
         this.logger.error('findOne', 'Project not found', error);
@@ -297,8 +301,12 @@ export class ProjectService {
               boards: true,
               orgId: true,
             },
-            rejectOnNotFound: true,
           });
+          
+          if (!project) {
+            this.logger.error('delete', 'Project not found');
+            throw new NotFoundException('Project not found');
+          }
         } catch (error) {
           if (error?.name === 'NotFoundError') {
             this.logger.error('delete', 'Project not found', error);
@@ -352,8 +360,12 @@ export class ProjectService {
                 },
               },
             },
-            rejectOnNotFound: true,
           });
+          
+          if (!projectData) {
+            this.logger.error('update', 'Project not found');
+            throw new NotFoundException('Project not found');
+          }
           const userPartOfProject = projectData?.members.length > 0;
           if (!userPartOfProject) {
             this.logger.error('update', 'Project admins is not part of the project');

@@ -160,12 +160,10 @@ export class TaskService {
 
   async findOne(id: string, user: UserPayload) {
     const { org, projects, role } = getUserDetails(user);
-    try {
-      const task = await this.prisma.task.findUnique({
+    try {      const task = await this.prisma.task.findUnique({
         where: {
           id,
         },
-        rejectOnNotFound: true,
         include: {
           assignees: {
             select: USER_BASIC_DETAILS,
@@ -193,9 +191,14 @@ export class TaskService {
                 select: USER_BASIC_DETAILS,
               },
             },
-          },
-        },
+          },        },
       });
+      
+      if (!task) {
+        this.logger.error('findOne', 'Task not found');
+        throw new NotFoundException('Task not found');
+      }
+      
       switch (role.name as Roles) {
         case 'user':
         case 'project-admin': {
@@ -403,17 +406,20 @@ export class TaskService {
     const { role, org, userId } = getUserDetails(user);
     await this.canUpdateTask(id, role, org.id, userId);
     let attachment;
-    try {
-      attachment = await this.prisma.attachment.findUnique({
+    try {      attachment = await this.prisma.attachment.findUnique({
         where: {
           id: attachmentId,
         },
-        rejectOnNotFound: true,
         select: {
           id: true,
           path: true,
         },
       });
+      
+      if (!attachment) {
+        this.logger.error('removeAttachment', 'Attachment not found');
+        throw new NotFoundException('Attachment not found');
+      }
     } catch (error) {
       if (error?.name === 'NotFoundError') {
         this.logger.error('removeAttachment', 'Attachment found', error);
@@ -454,8 +460,7 @@ export class TaskService {
 
   private async canUpdateTask(id: string, role: Role, orgId: string, userId: string) {
     let taskData;
-    try {
-      taskData = await this.prisma.task.findUnique({
+    try {      taskData = await this.prisma.task.findUnique({
         where: {
           id,
         },
@@ -463,8 +468,12 @@ export class TaskService {
           orgId: true,
           projectId: true,
         },
-        rejectOnNotFound: true,
       });
+      
+      if (!taskData) {
+        this.logger.error('canUpdateTask', 'Task not found');
+        throw new NotFoundException('Task not found');
+      }
     } catch (error) {
       if (error?.name === 'NotFoundError') {
         this.logger.error('canUpdateTask', 'Task not found', error);

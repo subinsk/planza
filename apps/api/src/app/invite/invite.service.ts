@@ -164,8 +164,11 @@ export class InviteService {
           orgId: true,
           roleId: true,
         },
-        rejectOnNotFound: true,
       });
+      
+      if (!invite) {
+        throw new NotFoundException('Invite not found');
+      }
       if (email !== invite.email) {
         this.logger.error('acceptInvite', 'Invite belongs to some other user');
         throw new ForbiddenException('Not allowed');
@@ -232,8 +235,11 @@ export class InviteService {
             },
           },
         },
-        rejectOnNotFound: true,
       });
+      
+      if (!invite) {
+        throw new NotFoundException('Invite not found');
+      }
       if (email !== invite.email) {
         this.logger.error('rejectInvite', 'Invite belongs to some other user');
         throw new ForbiddenException('Not allowed');

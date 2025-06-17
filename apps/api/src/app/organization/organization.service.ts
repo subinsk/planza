@@ -35,8 +35,11 @@ export class OrganizationService {
         where: {
           name: 'super-admin',
         },
-        rejectOnNotFound: true,
       });
+      
+      if (!role) {
+        throw new Error('Super-admin role not found');
+      }
     } catch (error) {
       this.logger.error('create', 'Failed to fetch the roles', error);
       throw new InternalServerErrorException('Failed to create org!');
@@ -517,7 +520,7 @@ export class OrganizationService {
 
   private async getOrgDetail(orgId) {
     try {
-      return await this.prisma.organization.findUnique({
+      const org = await this.prisma.organization.findUnique({
         where: { id: orgId },
         select: {
           createdById: true,
@@ -526,8 +529,13 @@ export class OrganizationService {
             select: { id: true },
           },
         },
-        rejectOnNotFound: true,
       });
+      
+      if (!org) {
+        throw new NotFoundException('Org not found');
+      }
+      
+      return org;
     } catch (error) {
       if (error?.name === 'NotFoundError') {
         this.logger.error('getOrgDetail', 'Org not found', error);
