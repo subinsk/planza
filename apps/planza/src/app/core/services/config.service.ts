@@ -44,10 +44,10 @@ export class ConfigService {
 
     // Debug env variables
     console.log('Runtime ENV variables:', runtimeEnv);
-    
-    // Validate runtime environment is available in production
+      // Validate runtime environment is available in production
     if (environment.production && (!runtimeEnv || !runtimeEnv.AUTH0_DOMAIN)) {
-      console.error('SECURITY WARNING: Runtime environment variables are not available in production.');
+      console.warn('Runtime environment variables are not fully available, using fallback values.');
+      console.log('Available runtime env keys:', runtimeEnv ? Object.keys(runtimeEnv) : 'none');
     }
     
     this.config = {
